@@ -2,7 +2,7 @@ package monoid_test
 
 import (
 	"fmt"
-	"testing"
+	"math"
 
 	"github.com/vinodhalaharvi/purekernels/pkg/monoid"
 )
@@ -92,4 +92,78 @@ func ExampleOptionFirstMonoid() {
 	result := monoid.Reduce(m, opts)
 	fmt.Println(result.GetOrElse("default"))
 	// Output: first
+}
+func ExampleMaxMonoid() {
+	m := monoid.NewMaxMonoid[int](math.MinInt)
+	result := monoid.Reduce(m, []int{5, 2, 9, 1, 7})
+	fmt.Println(result)
+	// Output: 9
+}
+
+func ExampleMinMonoid() {
+	m := monoid.NewMinMonoid[int](math.MaxInt)
+	result := monoid.Reduce(m, []int{5, 2, 9, 1, 7})
+	fmt.Println(result)
+	// Output: 1
+}
+
+func ExampleAvgMonoid() {
+	m := monoid.NewAvgMonoid()
+
+	// Create averages from individual measurements
+	avgs := []monoid.Avg{
+		monoid.FromValue(100.0),
+		monoid.FromValue(200.0),
+		monoid.FromValue(300.0),
+	}
+
+	result := monoid.Reduce(m, avgs)
+	fmt.Printf("%.1f\n", result.Value())
+	// Output: 200.0
+}
+
+func ExampleAvgMonoid_parallelAggregation() {
+	m := monoid.NewAvgMonoid()
+
+	// Simulate parallel computation of averages
+	batch1 := monoid.FromValues(10, 20, 30) // avg = 20
+	batch2 := monoid.FromValues(40, 50, 60) // avg = 50
+
+	combined := m.Combine(batch1, batch2)
+	fmt.Printf("Combined average: %.1f\n", combined.Value())
+	// Output: Combined average: 35.0
+}
+
+func ExampleDual() {
+	concat := monoid.NewStringConcatMonoid()
+	dual := monoid.NewDual[string](concat)
+
+	// Normal concatenation: left-to-right
+	normal := monoid.Reduce(concat, []string{"A", "B", "C"})
+	fmt.Println("Normal:", normal)
+
+	// Dual concatenation: right-to-left
+	reversed := monoid.Reduce(dual, []string{"A", "B", "C"})
+	fmt.Println("Dual:", reversed)
+
+	// Output:
+	// Normal: ABC
+	// Dual: CBA
+}
+
+func ExampleDual_listAppend() {
+	listMonoid := monoid.NewListMonoid[int]()
+	dualList := monoid.NewDual[[]int](listMonoid)
+
+	lists := [][]int{{1, 2}, {3, 4}, {5, 6}}
+
+	normal := monoid.Reduce(listMonoid, lists)
+	reversed := monoid.Reduce(dualList, lists)
+
+	fmt.Println("Normal:", normal)
+	fmt.Println("Dual:", reversed)
+
+	// Output:
+	// Normal: [1 2 3 4 5 6]
+	// Dual: [5 6 3 4 1 2]
 }
