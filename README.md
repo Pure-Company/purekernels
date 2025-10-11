@@ -1,6 +1,5 @@
 # 📚 PureKernels - Comprehensive README.md
 
-```markdown
 # 🔮 PureKernels
 
 [![Go Version](https://img.shields.io/badge/Go-1.25.0+-00ADD8?style=flat&logo=go)](https://go.dev/)
@@ -547,5 +546,3 @@ This project is licensed under the **MIT + Functorial Brain-Melt License (FBML)*
 See the [LICENSE](./LICENSE) file for full terms, side-effects, and possible category-theoretic hallucinations.
 
 ---
-
-# purekernels
