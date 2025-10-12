@@ -211,7 +211,17 @@ func parMapWithWorkers[A any, T any](
 		return []T{}
 	}
 
-	results := make([]T, len(items))
+	if workers <= 0 {
+		workers = runtime.NumCPU()
+	}
+
+	// Use channels for safe concurrent processing
+	type result struct {
+		value T
+		idx   int
+	}
+
+	results := make(chan result, len(items))
 	jobs := make(chan int, len(items))
 
 	var wg sync.WaitGroup
@@ -220,18 +230,34 @@ func parMapWithWorkers[A any, T any](
 		go func() {
 			defer wg.Done()
 			for idx := range jobs {
-				results[idx] = f(items[idx])
+				// Compute result and send via channel
+				results <- result{
+					value: f(items[idx]),
+					idx:   idx,
+				}
 			}
 		}()
 	}
 
+	// Send all jobs
 	for i := range items {
 		jobs <- i
 	}
 	close(jobs)
 
-	wg.Wait()
-	return results
+	// Wait and close results
+	go func() {
+		wg.Wait()
+		close(results)
+	}()
+
+	// Collect results in order
+	output := make([]T, len(items))
+	for res := range results {
+		output[res.idx] = res.value
+	}
+
+	return output
 }
 
 // ConcurrentBatch processes items in batches concurrently

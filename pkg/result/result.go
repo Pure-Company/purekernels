@@ -137,3 +137,11 @@ func (r Result[T]) FlatMap(f func(T) Result[T]) Result[T] {
 	}
 	return f(r.value)
 }
+
+// Error returns the error, returns nil if Ok
+func (r Result[T]) Error() error {
+	if r.isOk {
+		return nil
+	}
+	return r.err
+}
