@@ -5,7 +5,7 @@ package effect
 // This is the Reader monad: (R -> A)
 type Reader[R, A any] func(R) A
 
-// Pure creates a Reader that ignores environment and returns a constant
+// PureReader creates a Reader that ignores environment and returns a constant
 func PureReader[R, A any](a A) Reader[R, A] {
 	return func(R) A { return a }
 }

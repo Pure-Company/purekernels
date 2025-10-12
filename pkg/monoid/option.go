@@ -16,10 +16,6 @@ func None[T any]() Option[T] {
 	return Option[T]{Valid: false}
 }
 
-// OptionFirstMonoid takes the first valid option
-// Laws:
-//   - Identity: Combine(x, None) == x && Combine(None, x) == x
-//   - Associativity: Combine(Combine(x, y), z) == Combine(x, Combine(y, z))
 type OptionFirstMonoid[T any] struct{}
 
 // NewOptionFirstMonoid creates a first-wins option monoid
@@ -72,4 +68,23 @@ func (o Option[T]) GetOrElse(defaultValue T) T {
 		return o.Value
 	}
 	return defaultValue
+}
+
+// FlatMapOption allows type transformation A -> B
+func FlatMapOption[A, B any](
+	opt Option[A],
+	f func(A) Option[B],
+) Option[B] {
+	if !opt.Valid {
+		return None[B]()
+	}
+	return f(opt.Value)
+}
+
+// FlatMap Keep existing FlatMapOption in functor/map.go or add method for convenience
+func (o Option[T]) FlatMap(f func(T) Option[T]) Option[T] {
+	if !o.Valid {
+		return None[T]()
+	}
+	return f(o.Value)
 }

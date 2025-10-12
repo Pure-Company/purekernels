@@ -68,14 +68,6 @@ func (r Result[T]) MapErr(f func(error) error) Result[T] {
 	return Err[T](f(r.err))
 }
 
-// FlatMap chains computations (monadic bind)
-func (r Result[T]) FlatMap(f func(T) Result[T]) Result[T] {
-	if !r.isOk {
-		return Result[T]{err: r.err, isOk: false}
-	}
-	return f(r.value)
-}
-
 // Recover attempts to recover from error
 func (r Result[T]) Recover(f func(error) T) Result[T] {
 	if r.isOk {
@@ -125,4 +117,23 @@ func Partition[T any](results []Result[T]) ([]T, []error) {
 		}
 	}
 	return oks, errs
+}
+
+// FlatMapResult allows type transformation A -> B
+func FlatMapResult[A, B any](
+	r Result[A],
+	f func(A) Result[B],
+) Result[B] {
+	if !r.isOk {
+		return Err[B](r.err)
+	}
+	return f(r.value)
+}
+
+// Keep existing method for same-type chaining
+func (r Result[T]) FlatMap(f func(T) Result[T]) Result[T] {
+	if !r.isOk {
+		return Result[T]{err: r.err, isOk: false}
+	}
+	return f(r.value)
 }
