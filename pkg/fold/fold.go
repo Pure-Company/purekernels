@@ -1,6 +1,10 @@
 // Package fold provides functional loop replacements via folding operations
 package fold
 
+import (
+	"github.com/vinodhalaharvi/purekernels/pkg/monoid"
+)
+
 // FoldLeft folds from left to right - replaces for loops
 func FoldLeft[A, B any](f func(B, A) B, initial B, items []A) B {
 	result := initial
@@ -42,6 +46,27 @@ func Map[A, B any](f func(A) B, items []A) []B {
 		[]B{},
 		items,
 	)
+}
+
+// MapWithIndex transforms each element with its index (pure!)
+func MapWithIndex[A, B any](f func(int, A) B, items []A) []B {
+	type IndexedAcc struct {
+		Result []B
+		Index  int
+	}
+
+	indexed := FoldLeft(
+		func(acc IndexedAcc, item A) IndexedAcc {
+			return IndexedAcc{
+				Result: append(acc.Result, f(acc.Index, item)),
+				Index:  acc.Index + 1,
+			}
+		},
+		IndexedAcc{Result: []B{}, Index: 0},
+		items,
+	)
+
+	return indexed.Result
 }
 
 // FlatMap transforms and flattens - replaces nested loops
@@ -117,4 +142,61 @@ func All[A any](pred func(A) bool, items []A) bool {
 		}
 	}
 	return true
+}
+
+// Reduce combines elements using a monoid (categorical!)
+func Reduce[A any](m monoid.Monoid[A], items []A) A {
+	return FoldLeft(
+		func(acc A, item A) A {
+			return m.Combine(acc, item)
+		},
+		m.Empty(),
+		items,
+	)
+}
+
+// FoldMap is the canonical categorical fold - all others derive from this
+func FoldMap[A, M any](m monoid.Monoid[M], f func(A) M, items []A) M {
+	return FoldLeft(
+		func(acc M, a A) M { return m.Combine(acc, f(a)) },
+		m.Empty(),
+		items,
+	)
+}
+
+// ScanLeft produces intermediate accumulation results
+func ScanLeft[A, B any](f func(B, A) B, initial B, items []A) []B {
+	acc := initial
+	results := make([]B, 0, len(items)+1)
+	results = append(results, acc)
+	for _, item := range items {
+		acc = f(acc, item)
+		results = append(results, acc)
+	}
+	return results
+}
+
+// ScanRight produces intermediate results from the right
+func ScanRight[A, B any](f func(A, B) B, initial B, items []A) []B {
+	results := make([]B, len(items)+1)
+	results[len(items)] = initial
+	for i := len(items) - 1; i >= 0; i-- {
+		results[i] = f(items[i], results[i+1])
+	}
+	return results
+}
+
+// Zip combines two slices pairwise
+func Zip[A, B, C any](as []A, bs []B, f func(A, B) C) []C {
+	n := min(len(as), len(bs))
+	result := make([]C, n)
+	for i := 0; i < n; i++ {
+		result[i] = f(as[i], bs[i])
+	}
+	return result
+}
+
+// ZipWith is an alias for Zip with different argument order (more conventional)
+func ZipWith[A, B, C any](f func(A, B) C, as []A, bs []B) []C {
+	return Zip(as, bs, f)
 }
