@@ -96,6 +96,50 @@ func (nel NonEmptyList[T]) Reduce(f func(T, T) T) T {
 	return result
 }
 
+// Reverse is safe - guaranteed non-empty!
+func (nel NonEmptyList[T]) Reverse() NonEmptyList[T] {
+	all := nel.ToSlice()
+	for i, j := 0, len(all)-1; i < j; i, j = i+1, j-1 {
+		all[i], all[j] = all[j], all[i]
+	}
+	return NonEmptyList[T]{head: all[0], tail: all[1:]}
+}
+
+// Last is always safe - no Option needed!
+func (nel NonEmptyList[T]) Last() T {
+	if len(nel.tail) == 0 {
+		return nel.head
+	}
+	return nel.tail[len(nel.tail)-1]
+}
+
+// Zip combines two non-empty lists pairwise
+// Standalone function because it introduces new type parameters B and C
+func Zip[A, B, C any](
+	nel1 NonEmptyList[A],
+	nel2 NonEmptyList[B],
+	f func(A, B) C,
+) NonEmptyList[C] {
+	head := f(nel1.head, nel2.head)
+
+	n := min(len(nel1.tail), len(nel2.tail))
+	tail := make([]C, n)
+	for i := 0; i < n; i++ {
+		tail[i] = f(nel1.tail[i], nel2.tail[i])
+	}
+
+	return NonEmptyList[C]{head: head, tail: tail}
+}
+
+// ZipWith is an alias with more conventional argument order
+func ZipWith[A, B, C any](
+	f func(A, B) C,
+	nel1 NonEmptyList[A],
+	nel2 NonEmptyList[B],
+) NonEmptyList[C] {
+	return Zip(nel1, nel2, f)
+}
+
 // NonEmptyListSemigroup - concatenation forms a semigroup
 type NonEmptyListSemigroup[T any] struct{}
 
