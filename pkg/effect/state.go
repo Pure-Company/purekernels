@@ -64,3 +64,7 @@ func (st State[S, A]) Exec(initial S) S {
 	_, s := st(initial)
 	return s
 }
+
+func NewState[S, A any](f func(S) (A, S)) State[S, A] {
+	return State[S, A](f) // Just cast to State type
+}
