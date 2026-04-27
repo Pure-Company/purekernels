@@ -1,7 +1,7 @@
 // Package pair provides product types and their monoid instances
 package pair
 
-import "github.com/vinodhalaharvi/purekernels/pkg/monoid"
+import "github.com/Pure-Company/purekernels/pkg/monoid"
 
 // Pair represents a product of two values (A, B)
 type Pair[A, B any] struct {

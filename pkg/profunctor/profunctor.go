@@ -3,8 +3,8 @@
 package profunctor
 
 import (
-	"github.com/vinodhalaharvi/purekernels/pkg/monoid"
-	"github.com/vinodhalaharvi/purekernels/pkg/optic"
+	"github.com/Pure-Company/purekernels/pkg/monoid"
+	"github.com/Pure-Company/purekernels/pkg/optic"
 )
 
 // Star represents a profunctor A -> F[B] (Kleisli-like)

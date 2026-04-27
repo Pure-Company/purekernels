@@ -1,6 +1,6 @@
 package effect
 
-import "github.com/vinodhalaharvi/purekernels/pkg/monoid"
+import "github.com/Pure-Company/purekernels/pkg/monoid"
 
 // Writer represents a computation that produces a value and accumulates a log
 // This is the Writer monad: (A, W) where W is a monoid

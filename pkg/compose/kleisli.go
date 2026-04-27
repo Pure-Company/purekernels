@@ -2,10 +2,10 @@
 package compose
 
 import (
-	"github.com/vinodhalaharvi/purekernels/pkg/effect"
-	"github.com/vinodhalaharvi/purekernels/pkg/either"
-	"github.com/vinodhalaharvi/purekernels/pkg/monoid"
-	"github.com/vinodhalaharvi/purekernels/pkg/result"
+	"github.com/Pure-Company/purekernels/pkg/effect"
+	"github.com/Pure-Company/purekernels/pkg/either"
+	"github.com/Pure-Company/purekernels/pkg/monoid"
+	"github.com/Pure-Company/purekernels/pkg/result"
 )
 
 // KleisliEither composes A -> Either[L,B] with B -> Either[L,C]

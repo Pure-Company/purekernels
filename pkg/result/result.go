@@ -1,7 +1,7 @@
 // Package result provides sum types for error handling without exceptions
 package result
 
-import "github.com/vinodhalaharvi/purekernels/pkg/monoid"
+import "github.com/Pure-Company/purekernels/pkg/monoid"
 
 // Result represents a computation that may succeed (Ok) or fail (Err)
 // This is a sum type: either Value is valid, or Err is present

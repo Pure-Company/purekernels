@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/vinodhalaharvi/purekernels/pkg/monoid"
-	"github.com/vinodhalaharvi/purekernels/pkg/result"
+	"github.com/Pure-Company/purekernels/pkg/monoid"
+	"github.com/Pure-Company/purekernels/pkg/result"
 )
 
 // CollectFromChannel drains a channel into a slice

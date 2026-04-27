@@ -1,6 +1,6 @@
 package optic
 
-import "github.com/vinodhalaharvi/purekernels/pkg/monoid"
+import "github.com/Pure-Company/purekernels/pkg/monoid"
 
 // Iso represents an isomorphism (bidirectional conversion)
 // Laws:

@@ -1,6 +1,6 @@
 package nonempty
 
-import "github.com/vinodhalaharvi/purekernels/pkg/monoid"
+import "github.com/Pure-Company/purekernels/pkg/monoid"
 
 // NonEmptyList guarantees at least one element
 type NonEmptyList[T any] struct {

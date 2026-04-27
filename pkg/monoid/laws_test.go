@@ -2,6 +2,7 @@ package monoid
 
 import (
 	"math"
+	"math/rand"
 	"testing"
 	"testing/quick"
 )
@@ -48,25 +49,52 @@ func testMonoidLaws[T any](t *testing.T, m Monoid[T], gen func() T, eq func(T, T
 	})
 }
 
-// Test generators for different types
+// Random-value generators for the monoid law tests.
+//
+// The previous implementation tried to use testing/quick.Value here,
+// but called it as if it returned a single reflect.Value — quick.Value
+// has always returned (reflect.Value, bool), so that code never
+// compiled. We use math/rand directly: simpler, deterministic when
+// seeded, and obvious to anyone reading it.
+//
+// The generator is a package-level *rand.Rand seeded once at startup.
+// Tests that need reproducibility within a run get it for free; tests
+// that need a specific seed can seed lawsRand from a TestMain.
+var lawsRand = rand.New(rand.NewSource(1))
+
 func genInt() int {
-	return int(quick.Value(nil, nil).Interface().(int))
+	return lawsRand.Int()
 }
 
 func genFloat() float64 {
-	return quick.Value(nil, nil).Interface().(float64)
+	// NormFloat64 produces values from a normal distribution centered
+	// at 0 — well-spread mix of positive, negative, and around-zero
+	// values, which is what the law tests want.
+	return lawsRand.NormFloat64()
 }
 
 func genBool() bool {
-	return quick.Value(nil, nil).Interface().(bool)
+	return lawsRand.Intn(2) == 1
 }
 
 func genString() string {
-	return quick.Value(nil, nil).Interface().(string)
+	// Length 0–15, ASCII printable. Plenty of variety for concat
+	// associativity without producing megabyte strings on each call.
+	n := lawsRand.Intn(16)
+	b := make([]byte, n)
+	for i := range b {
+		b[i] = byte(' ' + lawsRand.Intn('~'-' '+1))
+	}
+	return string(b)
 }
 
 func genIntSlice() []int {
-	return quick.Value(nil, nil).Interface().([]int)
+	n := lawsRand.Intn(16)
+	s := make([]int, n)
+	for i := range s {
+		s[i] = lawsRand.Int()
+	}
+	return s
 }
 
 // Equality functions

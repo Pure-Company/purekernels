@@ -1,7 +1,7 @@
 // pkg/comonad/traced.go
 package comonad
 
-import "github.com/vinodhalaharvi/purekernels/pkg/monoid"
+import "github.com/Pure-Company/purekernels/pkg/monoid"
 
 // Traced is the dual of Writer - a function from monoid to value
 // This represents "position-dependent computation"

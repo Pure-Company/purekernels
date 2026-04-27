@@ -3,8 +3,8 @@ package bridges
 import (
 	"database/sql"
 
-	"github.com/vinodhalaharvi/purekernels/pkg/monoid"
-	"github.com/vinodhalaharvi/purekernels/pkg/result"
+	"github.com/Pure-Company/purekernels/pkg/monoid"
+	"github.com/Pure-Company/purekernels/pkg/result"
 )
 
 // ScanRow scans a single row into a value

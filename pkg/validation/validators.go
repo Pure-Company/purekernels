@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/vinodhalaharvi/purekernels/pkg/either"
+	"github.com/Pure-Company/purekernels/pkg/either"
 )
 
 // Error represents a validation error
@@ -80,20 +80,20 @@ func NotEmpty(field string) Validator[string] {
 }
 
 // MinLength validates minimum string length
-func MinLength(field string, min int) Validator[string] {
+func MinLength(field string, minVal int) Validator[string] {
 	return func(s string) either.Validation[Errors, string] {
-		if len(s) < min {
-			return Invalid[string](field, fmt.Sprintf("must be at least %d characters", min))
+		if len(s) < minVal {
+			return Invalid[string](field, fmt.Sprintf("must be at least %d characters", minVal))
 		}
 		return Valid(s)
 	}
 }
 
 // MaxLength validates maximum string length
-func MaxLength(field string, max int) Validator[string] {
+func MaxLength(field string, maxVal int) Validator[string] {
 	return func(s string) either.Validation[Errors, string] {
-		if len(s) > max {
-			return Invalid[string](field, fmt.Sprintf("must be at most %d characters", max))
+		if len(s) > maxVal {
+			return Invalid[string](field, fmt.Sprintf("must be at most %d characters", maxVal))
 		}
 		return Valid(s)
 	}
@@ -117,41 +117,45 @@ func Email(field string) Validator[string] {
 
 // Numeric Validators
 
-// Min validates minimum value
-func Min[T interface{ ~int | ~int64 | ~float64 }](field string, min T) Validator[T] {
+// Min validates minimum value.
+//
+// Note: parameters are named minVal/maxVal (not min/max) to avoid
+// shadowing the Go 1.21+ predeclared builtins. Some toolchains
+// flag the shadow as an error; the renamed form is portable.
+func Min[T interface{ ~int | ~int64 | ~float64 }](field string, minVal T) Validator[T] {
 	return func(val T) either.Validation[Errors, T] {
-		if val < min {
-			return Invalid[T](field, fmt.Sprintf("must be at least %v", min))
+		if val < minVal {
+			return Invalid[T](field, fmt.Sprintf("must be at least %v", minVal))
 		}
 		return Valid(val)
 	}
 }
 
 // Max validates maximum value
-func Max[T interface{ ~int | ~int64 | ~float64 }](field string, max T) Validator[T] {
+func Max[T interface{ ~int | ~int64 | ~float64 }](field string, maxVal T) Validator[T] {
 	return func(val T) either.Validation[Errors, T] {
-		if val > max {
-			return Invalid[T](field, fmt.Sprintf("must be at most %v", max))
+		if val > maxVal {
+			return Invalid[T](field, fmt.Sprintf("must be at most %v", maxVal))
 		}
 		return Valid(val)
 	}
 }
 
 // Between validates value is in range (accumulates both errors if outside range)
-func Between[T interface{ ~int | ~int64 | ~float64 }](field string, min, max T) Validator[T] {
+func Between[T interface{ ~int | ~int64 | ~float64 }](field string, minVal, maxVal T) Validator[T] {
 	return func(val T) either.Validation[Errors, T] {
 		errors := Errors{}
 
-		if val < min {
+		if val < minVal {
 			errors = append(errors, Error{
 				Field:   field,
-				Message: fmt.Sprintf("must be at least %v", min),
+				Message: fmt.Sprintf("must be at least %v", minVal),
 			})
 		}
-		if val > max {
+		if val > maxVal {
 			errors = append(errors, Error{
 				Field:   field,
-				Message: fmt.Sprintf("must be at most %v", max),
+				Message: fmt.Sprintf("must be at most %v", maxVal),
 			})
 		}
 

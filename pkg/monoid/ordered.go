@@ -1,17 +1,17 @@
 package monoid
 
-import "golang.org/x/exp/constraints"
+import "cmp"
 
 // MaxMonoid represents the maximum operation with the minimum value as identity
 // Laws:
 //   - Identity: Combine(x, minValue) == x && Combine(minValue, x) == x
 //   - Associativity: Combine(Combine(x, y), z) == Combine(x, Combine(y, z))
-type MaxMonoid[T constraints.Ordered] struct {
+type MaxMonoid[T cmp.Ordered] struct {
 	minValue T
 }
 
 // NewMaxMonoid creates a max monoid with specified minimum value
-func NewMaxMonoid[T constraints.Ordered](minValue T) MaxMonoid[T] {
+func NewMaxMonoid[T cmp.Ordered](minValue T) MaxMonoid[T] {
 	return MaxMonoid[T]{minValue: minValue}
 }
 
@@ -32,12 +32,12 @@ func (MaxMonoid[T]) Combine(a, b T) T {
 // Laws:
 //   - Identity: Combine(x, maxValue) == x && Combine(maxValue, x) == x
 //   - Associativity: Combine(Combine(x, y), z) == Combine(x, Combine(y, z))
-type MinMonoid[T constraints.Ordered] struct {
+type MinMonoid[T cmp.Ordered] struct {
 	maxValue T
 }
 
 // NewMinMonoid creates a min monoid with specified maximum value
-func NewMinMonoid[T constraints.Ordered](maxValue T) MinMonoid[T] {
+func NewMinMonoid[T cmp.Ordered](maxValue T) MinMonoid[T] {
 	return MinMonoid[T]{maxValue: maxValue}
 }
 

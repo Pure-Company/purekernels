@@ -2,9 +2,9 @@
 package category
 
 import (
-	"github.com/vinodhalaharvi/purekernels/pkg/either"
-	"github.com/vinodhalaharvi/purekernels/pkg/monoid"
-	"github.com/vinodhalaharvi/purekernels/pkg/result"
+	"github.com/Pure-Company/purekernels/pkg/either"
+	"github.com/Pure-Company/purekernels/pkg/monoid"
+	"github.com/Pure-Company/purekernels/pkg/result"
 )
 
 // NaturalTransformation represents a transformation between functors

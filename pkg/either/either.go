@@ -1,6 +1,6 @@
 package either
 
-import "github.com/vinodhalaharvi/purekernels/pkg/monoid"
+import "github.com/Pure-Company/purekernels/pkg/monoid"
 
 // Either represents a value that can be one of two types: Left or Right
 // By convention: Left = error/failure, Right = success

@@ -2,7 +2,7 @@
 // Package free provides free constructions for generating lawful functors
 package free
 
-import "github.com/vinodhalaharvi/purekernels/pkg/monoid"
+import "github.com/Pure-Company/purekernels/pkg/monoid"
 
 // Free[F, A] is the free monad over functor F
 // It represents a computation that can:

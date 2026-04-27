@@ -1,8 +1,8 @@
 package functor
 
 import (
-	"github.com/vinodhalaharvi/purekernels/pkg/monoid"
-	"github.com/vinodhalaharvi/purekernels/pkg/result"
+	"github.com/Pure-Company/purekernels/pkg/monoid"
+	"github.com/Pure-Company/purekernels/pkg/result"
 )
 
 // MapSlice transforms each element in a slice

@@ -1,6 +1,6 @@
 package either
 
-import "github.com/vinodhalaharvi/purekernels/pkg/monoid"
+import "github.com/Pure-Company/purekernels/pkg/monoid"
 
 // Validation is an applicative functor for accumulating errors
 // Unlike Either, it does NOT short-circuit - it accumulates all errors

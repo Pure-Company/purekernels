@@ -5,7 +5,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/vinodhalaharvi/purekernels/pkg/result"
+	"github.com/Pure-Company/purekernels/pkg/result"
 )
 
 // DecodeJSON decodes JSON from reader into type T

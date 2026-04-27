@@ -3,8 +3,8 @@ package comonad_test
 
 import (
 	"fmt"
-	"github.com/vinodhalaharvi/purekernels/pkg/comonad"
-	"github.com/vinodhalaharvi/purekernels/pkg/monoid"
+	"github.com/Pure-Company/purekernels/pkg/comonad"
+	"github.com/Pure-Company/purekernels/pkg/monoid"
 )
 
 func ExampleStore_cellularAutomata() {

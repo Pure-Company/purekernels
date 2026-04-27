@@ -45,7 +45,7 @@
 //
 // Use Validation with Ap3 for error accumulation:
 //
-//	import "github.com/vinodhalaharvi/purekernels/pkg/validation"
+//	import "github.com/Pure-Company/purekernels/pkg/validation"
 //
 //	result := either.Ap3(
 //	    validation.ErrorsMonoid,
@@ -57,7 +57,7 @@
 //
 // # Context-Aware Operations
 //
-//	import "github.com/vinodhalaharvi/purekernels/pkg/bridges"
+//	import "github.com/Pure-Company/purekernels/pkg/bridges"
 //
 //	userID := bridges.FromContext[string](ctx, "user_id")
 //	userID.Map(func(id string) { /* use id */ })

@@ -1,6 +1,6 @@
 package optic
 
-import "github.com/vinodhalaharvi/purekernels/pkg/monoid"
+import "github.com/Pure-Company/purekernels/pkg/monoid"
 
 // Prism focuses on a part that may not exist (for sum types)
 // Laws:

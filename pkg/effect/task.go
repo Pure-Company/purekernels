@@ -1,6 +1,6 @@
 package effect
 
-import "github.com/vinodhalaharvi/purekernels/pkg/result"
+import "github.com/Pure-Company/purekernels/pkg/result"
 
 // Task represents an asynchronous computation
 type Task[A any] struct {

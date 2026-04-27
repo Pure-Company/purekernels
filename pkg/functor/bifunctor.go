@@ -1,9 +1,9 @@
 package functor
 
 import (
-	"github.com/vinodhalaharvi/purekernels/pkg/either"
-	"github.com/vinodhalaharvi/purekernels/pkg/monoid"
-	"github.com/vinodhalaharvi/purekernels/pkg/pair"
+	"github.com/Pure-Company/purekernels/pkg/either"
+	"github.com/Pure-Company/purekernels/pkg/monoid"
+	"github.com/Pure-Company/purekernels/pkg/pair"
 )
 
 // BimapEither applies functions to both sides of Either
