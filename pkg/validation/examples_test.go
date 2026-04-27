@@ -5,11 +5,16 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/vinodhalaharvi/purekernels/pkg/either"
-	"github.com/vinodhalaharvi/purekernels/pkg/validation"
+	"github.com/Pure-Company/purekernels/pkg/either"
+	"github.com/Pure-Company/purekernels/pkg/validation"
 )
 
-func ExampleBasicValidation() {
+// Example_basicValidation shows the simplest single-field
+// validator usage. Named with a lowercase suffix so godoc renders
+// it under the package overview rather than tying it to a specific
+// identifier (the "basic" pattern doesn't correspond to any single
+// exported name).
+func Example_basicValidation() {
 	// Single field validation
 	result := validation.NotEmpty("username")("alice")
 	fmt.Println("Valid:", result.IsValid())
@@ -26,7 +31,12 @@ func ExampleBasicValidation() {
 	// username: cannot be empty
 }
 
-func ExampleAllCombinator() {
+// ExampleAll demonstrates the All combinator, which runs multiple
+// validators on the same value and accumulates every error rather
+// than short-circuiting at the first failure. The accumulating
+// behavior is what makes validation different from sequenced
+// short-circuit error handling.
+func ExampleAll() {
 	// Combine multiple validators - accumulates ALL errors
 	validateUsername := validation.All(
 		validation.NotEmpty("username"),
@@ -46,7 +56,12 @@ func ExampleAllCombinator() {
 	// username: must be at least 3 characters
 }
 
-func ExampleAp3_ValidateStruct() {
+// Example_validateStruct shows the canonical validation pattern:
+// validate each field independently, then combine results with
+// either.Ap3 to accumulate every error before constructing the
+// final struct. The Ap3 lives in pkg/either; the validation
+// package supplies the per-field combinators.
+func Example_validateStruct() {
 	type User struct {
 		Username string
 		Email    string
@@ -98,7 +113,11 @@ func ExampleAp3_ValidateStruct() {
 	// age: must be at least 18
 }
 
-func ExampleTraverseValidation() {
+// Example_traverse shows applying a validator across a slice via
+// either.TraverseValidation. Like Example_validateStruct, the
+// traverse function itself lives in pkg/either; this example shows
+// it composed with a validation.Email.
+func Example_traverse() {
 	// Validate a list of emails
 	emails := []string{
 		"alice@example.com",
@@ -178,7 +197,16 @@ func ExampleEnsure() {
 	// password: must contain at least one digit
 }
 
-func ExampleBetween_AccumulatesErrors() {
+// ExampleBetween_accumulates demonstrates that Between produces
+// every applicable error in one pass — both "below min" and
+// "above max" if the value somehow violates both (theoretically
+// impossible for ranges, but the same accumulation pattern shows
+// here for an out-of-bounds value).
+//
+// Suffix is lowercase per Go example-function convention: a
+// capital-letter suffix would parse as an example for an unknown
+// method `Between.<Suffix>`.
+func ExampleBetween_accumulates() {
 	// Between accumulates both min and max violations
 	result := validation.Between("age", 18, 65)(-5)
 
